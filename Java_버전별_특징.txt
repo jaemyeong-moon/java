@@ -1,0 +1,365 @@
+Java 버전별 특징
+
+JDK 1.0(1991) 
+
+ㆍOAK 발표: GE사의 요청으로, 썬마이크로 시스템즈에서 C++의 단점을 극복하고자 만든 언어
+
+ㆍ메모리 할당/해제의 어려움과 다중상속으로 인한 실수유발을 극복하려고 했다.
+
+ㆍ1996년, JDK 1.0발표 : Java로 개명, Java Virtual Machine 1.0을 발표했다. Java Applet도 이때 처음 도입
+
+
+
+
+
+JDK1.1(1997)
+
+ㆍJDBC, RMI, Reflection, JIT, Inner Class 개념이 포함
+
+
+
+
+
+JDK 1.2(1998)
+
+ㆍJava SE 1.2, ME 1.2, EE 1.2 세가지버전으로 발표 
+
+ - Swing이 SE에 포함, Corba IDL(이종기기간 함수호출 스펙), Collection Framework 포함
+
+
+
+
+
+JDK 1.3(2000)
+
+ㆍHotSpot(Sun에서 만든 JIT구현)
+
+ㆍJNDI(디렉토리 및 이름으로 원하는 서비스 찾음)
+
+
+
+
+
+
+
+JDK 1.4(2002)
+
+ㆍJava Web Start포함 (웹 브라우저에서 한 번의 클릭으로 모든 기능을 갖춘 응용 프로그램을 실행할 수있는 기능을 제공하는 응용 프로그램 배포 기술)
+
+ㆍJCP(Java Community Process)에 의해서 오픈소스 정책으로 자바가 관리되기 시작한 버전
+
+ㆍJava 2 Security 모델의 확립
+
+ㆍLanguage: assert 도입
+
+ㆍAPI :  Regular Expression, Assert keyword, Security 2 version(현재 security model), Non Blocking IO(NIO)
+
+
+
+
+
+
+
+
+
+Java 1.5(2004)
+
+ㆍ기능적으로 가장 많은 변화가 생긴버전 (Generics가 가장 대표적)
+
+ㆍLanguageI: Generics , annotation, auto boxing, enum,vararg ,foreach, static imports 도입
+
+ㆍAPI : java.util.concurrent API, scanner class
+
+
+
+
+
+
+
+Java 6(2006)
+
+ㆍ가비지 컬렉터 G1(Garbage First) GC 지원
+
+ㆍJDK 6에서는 G1 GC를 early access라고 부르며 그냥 시험 삼아 사용할 수만 있도록 한다.
+
+ㆍ보안, 성능 강화 
+
+ㆍJVM/Swing에 있어 많은 Performance 향상(synchronization, compiler, GC,start-up time)
+
+
+
+
+
+Java 7(2011) 
+
+ㆍJVM : Dynamic Language support (invoked dynamic - new byte operation)
+
+ㆍLanguage : try-resource, String in Switch, generics 내 타입추론, 숫자에서 underscore 사용 가능
+
+ㆍAPI : Concurrency 강화, NIO 강화, sort강화, crypto강화, GPU강화
+
+ㆍJavaFX가 기본으로 포함
+
+ㆍJDK 7에서 정식으로 G1 GC를 포함하여 제공
+
+ㆍ안정적인 ARM지원
+
+ * generics내 타입 추론
+
+   -이전 버전 
+
+     Map<String, Object> user = new HashMap<String, Object>();
+
+   - 7버전
+
+     Map<String, Object> user = new HashMap<> ();
+
+
+
+ * Switch문에서 문자열 허용
+
+   switch (day) { 
+
+    case "NEW": System.out.println("Order is in NEW state"); break; 
+
+    case "CANCELED": System.out.println("Order is Cancelled"); break; 
+
+    case "REPLACE": System.out.println("Order is replaced successfully"); break; 
+
+    case "FILLED": System.out.println("Order is filled"); break; 
+
+    default: System.out.println("Invalid"); 
+
+    }
+
+
+
+  * 7 에서는 try with resource 구문이 추가되어 자동으로 자원들을 close한다. 
+
+    이러한 메커니즘을 사용하기 위해서는 AutoClosable, Closeable 인터페이스를 구현해야 한다. 
+
+    Java 7의 Streams, Files, Socket, DB Connection등은 해당 인터페이스를 구현하고 있다. 
+
+   - 이전 버전
+
+     public static void main(String args[]) { 
+
+      FileInputStream fin = null; 
+
+      BufferedReader br = null; 
+
+      try { 
+
+        fin = new FileInputStream("info.xml"); 
+
+         br = new BufferedReader(new InputStreamReader(fin)); 
+
+        if (br.ready()) { 
+
+            String line1 = br.readLine(); 
+
+            System.out.println(line1); 
+
+           } 
+
+         } catch (Exception ex) { 
+
+           System.out.println("error!!"); 
+
+          } finally { 
+
+            try {
+
+           if (fin != null) fin.close(); 
+
+           if (br != null) br.close(); 
+
+          } catch (IOException ie) { 
+
+            System.out.println("Failed to close files"); 
+
+           } 
+
+         } 
+
+       }
+
+   - 7 버전
+
+      public static void main(String args[]) {
+
+      try (FileInputStream fin = new FileInputStream("info.xml");
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(fin));) {
+
+        if (br.ready()) {
+
+            String line1 = br.readLine();
+
+            System.out.println(line1);
+
+        }
+
+      } catch (Exception ex) {
+
+        System.out.println("error");
+
+       }
+
+      }
+
+     }
+
+
+
+
+
+  * Fork/Join Framework
+
+   - fork/join framework는 멀티프로세서의 성능을 이용할 수 있는 ExecutorService인터페이스의 구현체이다. 
+
+     반복적으로 작은 조각으로 작업을 나누어 수행 할 수 있게 설계되어있다. 
+
+
+
+  * Underscore in Numeric literal
+
+   - 숫자형(정수,실수)에 _(underscore)문자열을 사용할 수 있다. 큰 숫자를 다룰때 가독성이 좋아진다. 
+
+     int billion = 1_000_000_000; // 10^9
+
+     long creditCardNumber = 1234_4567_8901_2345L; //16 digit number
+
+     long ssn = 777_99_8888L;
+
+     double pi = 3.1415_9265;
+
+     float pif = 3.14_15_92_65f;
+
+
+
+
+
+Java 8(2014)
+
+   - JDK는 2개 버전으로 나뉨. 하나는 폐쇄적인 상업 코드 기반의 Oracle JDK, 하나는 오픈 소스 기반의 OpenJDK이다.
+
+   - Oracle JDK에 존재하고 OpenJDK에는 없는 대표적 기능으로 글꼴 라이브러리와 Java Web Start가 있다. 
+
+     서버 애플리케이션 개발에는 쓰이지 않는 기능들이다.
+
+   ㆍLambda 및 함수형프로그래밍, Default Method Interface, 메소드 참조
+
+   ㆍJEP에 의해서 새로운 기능들이 발의되기 시작.
+
+   ㆍAPI : Nashorn (JS엔진), new Date and Time API, Stream API, Collection에 대한 함수형화 (Interface에 default로 인해 가능)
+
+          새로운 날짜와 시간 API인 java.time 패키지를 제공
+
+
+
+     *  기존 Calendar 클래스에서는 월(month)을 나타낼 때 1월부터 12월을 0부터 11까지로 표현해야 하는 불편함이 있다.
+
+        기존 Calendar 인스턴스는 불변 객체(immutable object)가 아니라서 값이 수정될 수 있습니다.
+
+           LocalDate today = LocalDate.now();
+
+           System.out.println("올해는 " + today.getYear() + "년입니다.");
+
+
+
+
+
+Java 9(2017)
+
+   ㆍJava용 REPL, JShell 등장 (대화식 REPL(Read Eval print Loop) 도구 제공)
+
+   ㆍModular System (Jigsaw)지원
+
+   ㆍ불변 Collection(immutable collection)제공
+
+   ㆍJava 9는 익명 클래스에 대한 Diamond Operator를 허용 (anonymous inner 클래스에서 diamond operator 사용 가능)
+
+   ㆍtry-with-resources 개선
+
+   ㆍ인터페이스 내 private 메소드 사용 가능
+
+   ㆍReactive Stream API 추가
+
+   ㆍOptional To Stream
+
+   ㆍHTTP2 Client
+
+   ㆍiCMS GC Deprecated 됨
+
+
+
+Java 10(2018)
+
+   ㆍvar 키워드를 이용한 지역변수 선언 및 타입추론 가능
+
+   ㆍ불변(Unmodifiable) Collection 향상
+
+   ㆍ병렬 처리 가비지 컬렉션 도입으로 인한 성능 향상
+
+   ㆍ개별 쓰레드로 분리된 Stop-The-World
+
+   ㆍ루트 CA 목록 등 추가
+
+   ㆍJDK의 Repository가 하나로 통합
+
+   ㆍJVM 힙 영역을 시스템 메모리가 아닌 다른 종류의 메모리에도 할당 가능
+
+   ㆍ실험적인 Java 기반의 JIT(Just In Time) 컴파일러 추가
+
+   ㆍDeprecated된 API는 Java SE 10에서 모두 삭제
+
+
+
+Java 11(2018.09)
+
+   ㆍ일반 지원은 2023년 9월, 연장 지원은 2026년 9월에 종료될 예정이다. 
+
+   ㆍ이클립스 재단으로 넘어간 Java EE가 JDK에서 삭제되고, JavaFX도 JDK에서 분리되어 별도의 모듈로 제공된다. 
+
+   ㆍ람다 파라미터에 대한 지역변수 문법 : (var x, var y) -> x.process(y)  =>  (x, y) -> x.process(y)
+
+         IntStream.of(1, 2, 3).filter((var i) -> i % 2 == 0).forEach(System.out::println); 
+
+         IntStream.of(1, 2, 3).filter(i -> i % 2 == 0).forEach(System.out::println); 
+
+   ㆍHTTP 클라이언트 표준화 기능 추가 : Java 9, 10에 사용되었던 jdk.incubator.http 패키지가 표준화되어 java.net.http 패키지로 추가
+
+   ㆍ네스트 기반 액세스 컨트롤(Nest-based access controls)
+
+    - 액세스 가능성을 확장하는 브릿지 메소드 삽입 지원 컴파일러의 필요성 제거
+
+    - 다이나믹 클래스-파일 콘스탄스(Dynamic class-file constans) 
+
+    - 새로운 형태의 구체화 가능한 클래스파일 상수를 만드는데 요구되는 비용과 간섭을 줄이고, 표현력과 성능을 위한 보다 다양한 옵션 제공 
+
+    - 엡실론(Epsilon) 가지비 컬렉터 : 오버헤드의 최저지연과 할당 제한이 가능한 완전한 수동 가비지 컬렉터 적용
+
+   ㆍThe Z Garbage Collector(ZGC) : 대기 시간이 낮은 확장 가능한(Scalable Low-Latency) GC이다.
+
+   ㆍ플라이트 레코더(Flight Recorder) : 자바 애플리케이션과 핫스팟 JVM의 오류 해결을 위한 낮은 오버헤드 데이터 수집 프레임워크 제공
+
+
+
+
+
+Java 12(2019.03)
+
+   - Switch문의 확장
+
+     switch (day) { 
+
+       case MONDAY, FRIDAY, SUNDAY -> System.out.println(6); 
+
+       case TUESDAY -> System.out.println(7); 
+
+       case THURSDAY, SATURDAY -> System.out.println(8); 
+
+       case WEDNESDAY -> System.out.println(9); 
+
+     }

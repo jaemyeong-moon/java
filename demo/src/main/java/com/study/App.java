@@ -100,22 +100,49 @@ public class App
 
         try{
             Stream<String> lineStream = Files.lines(Paths.get("file.txt"), Charset.forName("UTF-8"));  //파일을 읽어서 라인들을 스트림으로 만듬 
+            for(Object s : lineStream.toArray())
+            {
+                // System.out.println((String)s);
+            }
         }catch(IOException e){}
-        
+
+        /*
+        병렬 스트림 Parallel Stream
+        스트림 생성 시 사용하는 stream 대신 parallelStream 메소드를 사용해서 병렬 스트림을 쉽게 
+        생성할 수 있습니다. 내부적으로는 쓰레드를 처리하기 위해 자바 7부터 도입된 Fork/Join framework를
+        사용합니다.        
+
+        * 병렬 스트림 : 병렬 스트림은 데이터 병렬성을 구현한 것이다.
+                    멀티코어의 수만큼 대용량 요소를 서브 요소들로 나누고, 각각의 서브 요소들을 분리된 스레드에서 병렬 처리시킨다.
+                    예를 들어 쿼드 코어(Quad Core) CPU일 경우 4개의 서브 요소들로 나누고, 4개의 스레드가 각각의 서브 요소들을 병렬 처리한다.
+                    병렬 스트림은 내부적으로 포크조인 프레임워크를 이용한다.
+        출처 및 추가 정보 : https://ict-nroo.tistory.com/43
+        */
         List<Product> productList = Arrays.asList(new Product(1,10), new Product(2,100), new Product(3,200), new Product(4,300) );
         Stream<Product> parallelStream2 = productList.parallelStream();
 
         boolean isParallel = parallelStream2.isParallel();
         System.out.println("isParallel : "+isParallel);
 
-        boolean isMany = parallelStream2.map(product -> product.getAmount() ).anyMatch(amount -> amount > 200);
+        boolean isMany = parallelStream2.map(product -> product.getAmount() ).anyMatch(amount -> amount > 200); //200개이상인 애들을 스트림에서 찾아서 있으면 True 반환.
         System.out.println("isMany : "+isMany);
 
+        Arrays.stream(arr).parallel(); //Array -> Parallel Stream
+        IntStream intStream2 = IntStream.range(1, 150).parallel(); 
+        System.out.println("IsParallel ? "+intStream2.isParallel());
+        IntStream intStream3 = intStream2.sequential(); // Parallel -> sequential
+        System.out.println("IsParallel ? "+intStream2.isParallel());
 
 
 
-        
-        
+        Stream<String> stream3 = Stream.of("Java", "Scala", "Groovy");
+        Stream<String> stream4 = Stream.of("Python", "Go", "Swift");
+        Stream<String> concat = Stream.concat(stream3, stream4); //스트림 연결.
+        // [Java, Scala, Groovy, Python, Go, Swift]
+
+        /*스트림 가공하기*/
+
+
         
     }
 }
