@@ -5,9 +5,11 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
@@ -140,9 +142,111 @@ public class App
         Stream<String> concat = Stream.concat(stream3, stream4); //스트림 연결.
         // [Java, Scala, Groovy, Python, Go, Swift]
 
-        /*스트림 가공하기*/
+
+        Example exam = new Example();
+        exam.filtering();
+        exam.mapping();
+        exam.sorting();
+
+    }
+  
+   
+}
+class Student
+{
+    int kor;
+    int eng;
+    int math;
+    Student(int kor, int eng, int math)
+    {
+        setKor(kor);
+        setEng(eng);
+        setMath(math);
+    }
+    public int getKor() {
+    	return this.kor;
+    }
+    public void setKor(int kor) {
+    	this.kor = kor;
+    }
 
 
-        
+    public int getEng() {
+    	return this.eng;
+    }
+    public void setEng(int eng) {
+    	this.eng = eng;
+    }
+
+
+    public int getMath() {
+    	return this.math;
+    }
+    public void setMath(int math) {
+    	this.math = math;
+    }
+}
+class Example
+{
+    /*
+    필터(filter)은 스트림 내 요소들을 하나씩 평가해서 걸러내는 작업입니다. 인자로 받는 Predicate 는 boolean 을 
+    리턴하는 함수형 인터페이스로 평가식이 들어가게 됩니다.
+    
+    */
+      /*스트림 가공하기*/
+    void filtering()
+    {
+        List<String> names = Arrays.asList("Moon", "Jae", "Myeong");
+        Stream<String> stream = names.stream().filter(name -> name.contains("M")); // [Moon,Myeong]
+        for(Object s : stream.toArray())
+        {
+            System.out.println((String)s);
+        }
+    }
+    void mapping()
+    {
+        List<String> names = Arrays.asList("Moon", "Jae", "Myeong");
+        Stream<String> stream = names.stream().map(String::toUpperCase); //MOON,JAE,MYEONG
+        // for(Object s : stream.toArray())
+        // {
+        //     System.out.println((String)s);
+        // }
+        List<Product> productList = Arrays.asList(new Product(1,10), new Product(2,100), new Product(3,200), new Product(4,300) );
+        Stream<Integer> stream2 = productList.stream().map(Product::getAmount); // [10 100 200 300]
+        // for(Object s : stream2.toArray())
+        // {
+        //     System.out.print((int)s+" ");
+        // }
+        List<Student> students = Arrays.asList(new Student(5,5,5), new Student(10,5,7), new Student(6,7,8));
+        students.stream().flatMapToInt(student -> IntStream.of(student.getKor(), student.getEng(), student.getMath()))
+        // .average().ifPresent(avg -> System.out.println(Math.round(avg *10)/10.0));
+        .average().ifPresent(avg -> System.out.println(avg));
+    }
+    void sorting()
+    {
+        List<Object> list = IntStream.of(5,1,2,4,9,8).sorted().boxed().collect(Collectors.toList()); // 1 2 4 5 8 9
+        for(Object o : list)
+        {
+            System.out.print((int)o+" ");
+        }
+
+        List<String> lang = Arrays.asList("Java", "Scala", "Groovy", "Python", "Go", "Swift");
+
+        lang.stream().sorted().collect(Collectors.toList());
+        // [Go, Groovy, Java, Python, Scala, Swift]
+
+        /* Comaparator 연산자 + sorted() 조합으로  다양한 연산을 쉽게 표현할 수 있다. */
+        lang.stream().sorted(Comparator.reverseOrder()).collect(Collectors.toList()); //Comparator 비교자 ( 새로 생긴건가?? )
+        // [Swift, Scala, Python, Java, Groovy, Go]
+
+        //Comparator의 compare 메소드는 두가지 인자를 비교해서 값을 리턴.
+        //int compare(T o1, T o2)
+
+        lang.stream()
+                .sorted(Comparator.comparingInt(String::length)).collect(Collectors.toList());
+        // [Go, Java, Scala, Swift, Groovy, Python]
+
+        lang.stream().sorted((s1, s2) -> s2.length() - s1.length()).collect(Collectors.toList());
+        // [Groovy, Python, Scala, Swift, Java, Go]
     }
 }
